@@ -15,7 +15,6 @@ class Controls(QWidget):
         self.current_score = QLabel(text="Current score: 0")
         self.skipped_count = QLabel(text="Skipped: 0")
         self.high_score = QLabel(text="High score: 0")
-        self.answer_rate = QLabel(text="Answer rate: 0%")
 
         self.start_game_btn = QPushButton(text="Start Game")
         self.practice_game_btn = QPushButton(text="Practice")
@@ -24,7 +23,6 @@ class Controls(QWidget):
         self.layout.addWidget(self.current_score)
         self.layout.addWidget(self.skipped_count)
         self.layout.addWidget(self.high_score)
-        self.layout.addWidget(self.answer_rate)
         # self.layout.addWidget(self.start_game_btn)
         # self.layout.addWidget(self.practice_game_btn)
 
@@ -46,12 +44,6 @@ class Controls(QWidget):
         """)
 
         self.high_score.setFont(theme.font_normal)
-
-        self.answer_rate.setStyleSheet(f"""
-            color: {theme.colors.get("white")};
-        """)
-
-        self.answer_rate.setFont(theme.font_normal)
 
         self.start_game_btn.setStyleSheet(f"""
             color: {theme.colors.get("primary")};
@@ -75,6 +67,9 @@ class Controls(QWidget):
 
     def set_current_score(self, score: int):
         self.current_score.setText(f"Current score: {score}")
+
+    def set_high_score(self, score: int):
+        self.high_score.setText(f"High score: {score}")
 
     def set_skip_count(self, skipped: int):
         self.skipped_count.setText(f"Skipped: {skipped}")

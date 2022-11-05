@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QMessageBox
 from PySide6.QtCore import Qt
 from components.core import CoreSection
 from components.controls import Controls
@@ -41,15 +41,28 @@ class Game(QWidget):
         self.core_widget.set_skip_btn_on_click(self.skip)
 
     def submit(self):
+        # Input validation
         user_input = self.core_widget.get_user_input()
+        if not self.service.is_input_valid(user_input):
+            QMessageBox.information(
+                None, "Invalid", "Please enter a mathematical expression.")
+            return
+
+        # Calculate result
         user_result = self.service.calculate_result(user_input)
 
+        # Add to history
         self.history_tab.add_history(user_input, user_result)
 
+        # Check correctness
         if self.service.is_correct(user_result):
             self.service.increment_current_score()
-            self.controls.set_current_score(self.service.get_current_score())
+            current_score = self.service.get_current_score()
+            self.controls.set_current_score(current_score)
             self.core_widget.reset_user_input()
+
+            high_score = self.service.get_high_score()
+            self.controls.set_high_score(high_score)
 
             question = self.service.get_question()
             self.core_widget.set_question(question)
