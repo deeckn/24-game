@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QMessageBox
+from PySide6.QtWidgets import QWidget, QHBoxLayout
 from PySide6.QtCore import Qt
 from components.core import CoreSection
 from components.controls import Controls
@@ -42,10 +42,8 @@ class Game(QWidget):
 
     def submit(self):
         # Input validation
-        user_input = self.core_widget.get_user_input()
+        user_input = self.core_widget.get_user_input().replace(" ", "")
         if not self.service.is_input_valid(user_input):
-            QMessageBox.information(
-                None, "Invalid", "Please enter a mathematical expression.")
             return
 
         # Calculate result

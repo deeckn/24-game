@@ -123,4 +123,4 @@ class CoreSection(QWidget):
         self.skip_button.clicked.connect(function)
 
     def set_question(self, question: str):
-        self.question_label.setText(question)
+        self.question_label.setText(" ".join(list(question)))

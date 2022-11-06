@@ -1,3 +1,4 @@
+from PySide6.QtWidgets import QMessageBox
 from shunting_yard import ShuntingYard
 
 
@@ -20,11 +21,12 @@ class GameService:
 
     def get_question(self) -> str:
         # Use Prolog here
+        # Assign to self.current_question in the format of a string
+        # Eg. "1234"
 
         # Mock data
-        questions = ["1 2 3 4", "4 3 2 1", "5 5 4 1"]
-        self.random += 1
-        return questions[self.random % 3]
+        self.current_question = "5514"
+        return self.current_question
 
     def get_current_score(self) -> int:
         return self.current_score
@@ -54,4 +56,23 @@ class GameService:
         if len(user_input) == 0:
             return False
 
-        return False
+        allowed_characters = list("123456789+-*/() ")
+        for char in user_input:
+            if char not in allowed_characters:
+                QMessageBox.information(
+                    None, "Invalid", "Please enter a mathematical expression.")
+                return False
+
+        available_numbers = list(self.current_question)
+        user_numbers = []
+        for num in user_input:
+            if num.isalnum():
+                user_numbers.append(num)
+
+        for num in user_numbers:
+            if user_numbers.count(num) != available_numbers.count(num):
+                QMessageBox.information(
+                    None, "Invalid", "Please use all four numbers only once")
+                return False
+
+        return True
