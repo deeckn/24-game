@@ -20,7 +20,7 @@ class CoreSection(QWidget):
         self.button_container = QWidget()
         self.button_container_layout = QHBoxLayout()
         self.skip_button = QPushButton(text="Skip")
-        self.hint_button = QPushButton(text="Hint")
+        self.reveal_button = QPushButton(text="Reveal")
         self.submit_button = QPushButton(text="Submit")
 
         self.credit_label = QLabel(
@@ -33,7 +33,7 @@ class CoreSection(QWidget):
         self.layout.addWidget(self.answer_input)
 
         self.button_container_layout.addWidget(self.skip_button)
-        self.button_container_layout.addWidget(self.hint_button)
+        self.button_container_layout.addWidget(self.reveal_button)
         self.button_container_layout.addWidget(self.submit_button)
         self.button_container.setLayout(self.button_container_layout)
         self.layout.addWidget(self.button_container)
@@ -82,14 +82,14 @@ class CoreSection(QWidget):
 
         self.skip_button.setFont(theme.font_bold)
 
-        self.hint_button.setStyleSheet(f"""
+        self.reveal_button.setStyleSheet(f"""
             background-color: {theme.colors.get("white")};
             color: {theme.colors.get("primary")};
             border-radius: 5px;
             height: 36px;
         """)
 
-        self.hint_button.setFont(theme.font_bold)
+        self.reveal_button.setFont(theme.font_bold)
 
         self.submit_button.setStyleSheet(f"""
             background-color: {theme.colors.get("primary")};
@@ -116,8 +116,8 @@ class CoreSection(QWidget):
     def set_submit_btn_on_click(self, function):
         self.submit_button.clicked.connect(function)
 
-    def set_hint_btn_on_click(self, function):
-        self.hint_button.clicked.connect(function)
+    def set_reveal_btn_on_click(self, function):
+        self.reveal_button.clicked.connect(function)
 
     def set_skip_btn_on_click(self, function):
         self.skip_button.clicked.connect(function)
