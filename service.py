@@ -1,13 +1,17 @@
 from PySide6.QtWidgets import QMessageBox
 from shunting_yard import ShuntingYard
+from pyswip import Prolog
+from random import randint
 
 
 class GameService:
+    CONSULT_FILE = "24_consult.pl"
     current_score: int
     high_score: int
     skipped: int
     answer_rate: float
     current_question: str
+    prolog: Prolog
 
     def __init__(self):
         self.current_score = 0
@@ -15,17 +19,21 @@ class GameService:
         self.skipped = 0
         self.current_question = str()
         self.calculator = ShuntingYard()
+        self.prolog = Prolog()
+        self.prolog.consult(GameService.CONSULT_FILE)
 
         # Mock variable
         self.random = 0
 
-    def get_question(self) -> str:
-        # Use Prolog here
-        # Assign to self.current_question in the format of a string
-        # Eg. "1234"
+    def __generate_question(self):
+        numbers = [randint(1, 9) for _ in range(4)]
+        while not bool(list(self.prolog.query(f"solve24order({numbers},R)."))):
+            numbers = [randint(1, 9) for _ in range(4)]
 
-        # Mock data
-        self.current_question = "5514"
+        self.current_question = list(map(str, numbers))
+
+    def get_question(self) -> str:
+        self.__generate_question()
         return self.current_question
 
     def get_current_score(self) -> int:
