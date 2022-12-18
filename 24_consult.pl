@@ -32,3 +32,5 @@ solve24order(Numbers, Prog) :- try_prog(Numbers, Prog, 24).
 solve24order(Numbers, Prog) :- try_prog(Numbers, Prog, 24.0).
 
 solve24(Numbers, Prog) :- setof(T, lists:perm(Numbers, T), Bag), lists:member(T1, Bag), solve24order(T1, Prog), rpn2exp([], Prog, E), write(E), nl, fail.
+
+is_input_valid(Prog) :- eval_rpn(Prog, 24).
