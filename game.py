@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QMessageBox
 from PySide6.QtCore import Qt
 from components.core import CoreSection
 from components.controls import Controls
@@ -39,6 +39,7 @@ class Game(QWidget):
         # Behavior
         self.core_widget.set_submit_btn_on_click(self.submit)
         self.core_widget.set_skip_btn_on_click(self.skip)
+        self.core_widget.set_reveal_btn_on_click(self.reveal)
 
     def submit(self):
         # Input validation
@@ -73,3 +74,7 @@ class Game(QWidget):
 
         question = self.service.get_question()
         self.core_widget.set_question(question)
+
+    def reveal(self):
+        solution = self.service.get_solution()
+        QMessageBox.information(None, "Solution", solution)
