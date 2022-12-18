@@ -3,16 +3,16 @@
 :- use_module(library(lists)).
 
 % Define a list of valid operators
-operator(add).
-operator(sub).
-operator(mul).
-operator(div).
+operator("add").
+operator("sub").
+operator("mul").
+operator("div").
 
 % Perform the specified operation on the given operands and return the result in the fourth argument
-doop(add, A, B, C) :- C = A + B.
-doop(sub, A, B, C) :- C = A - B.
-doop(mul, A, B, C) :- C = A * B.
-doop(div, A, B, C) :- B1 is B, B1 \= 0, C = A / B.
+doop("add", A, B, C) :- C = A + B.
+doop("sub", A, B, C) :- C = A - B.
+doop("mul", A, B, C) :- C = A * B.
+doop("div", A, B, C) :- B1 is B, B1 \= 0, C = A / B.
 
 % Convert an RPN expression (given as a list of integers and operators)
 % into an infix expression
@@ -48,7 +48,15 @@ try_prog([A, B, C, D], [A, B, C, X, Y, D, Z], N) :- eval_rpn([A, B, C, X, Y, D, 
 try_prog([A, B, C, D], [A, B, C, D, X, Y, Z], N) :- eval_rpn([A, B, C, D, X, Y, Z], N).
 solve24order(Numbers, Prog) :- try_prog(Numbers, Prog, 24).
 solve24order(Numbers, Prog) :- try_prog(Numbers, Prog, 24.0).
-solve24(Numbers, Prog) :- setof(T, lists:perm(Numbers, T), Bag), lists:member(T1, Bag), solve24order(T1, Prog), rpn2exp([], Prog, E), write(E), nl, fail.
+
+/* solve24(Numbers, Prog) :- setof(T, lists:perm(Numbers, T), Bag), lists:member(T1, Bag), solve24order(T1, Prog), rpn2exp([], Prog, E), write(E), nl, fail. */
+
+solve24(Numbers, Prog) :-
+    findall(Prog1, (solve24order(Numbers, Prog1), rpn2exp([], Prog1, _)), Progs),
+    Progs = [Prog|_].
 
 % If the given list of integer can be evaluated to 24 return true
 is_correct(Prog) :- eval_rpn(Prog, 24).
+
+
+
