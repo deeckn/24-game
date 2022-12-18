@@ -22,9 +22,6 @@ class GameService:
         self.prolog = Prolog()
         self.prolog.consult(GameService.CONSULT_FILE)
 
-        # Mock variable
-        self.random = 0
-
     def __generate_question(self):
         numbers = [randint(1, 9) for _ in range(4)]
         while not bool(list(self.prolog.query(f"solve24order({numbers},R)."))):
@@ -84,3 +81,29 @@ class GameService:
                 return False
 
         return True
+
+    def postfix_to_infix(self, tokens: list) -> str:
+        stack = []
+
+        for token in tokens:
+            if isinstance(token, int):
+                stack.append(str(token))
+
+            elif isinstance(token, bytes):
+                op2 = stack.pop()
+                op1 = stack.pop()
+                result = "({} {} {})".format(op1, token.decode(), op2)
+                stack.append(result)
+
+        infix: str = stack[0]
+        infix = infix.replace("add", "+")
+        infix = infix.replace("sub", "-")
+        infix = infix.replace("mul", "*")
+        infix = infix.replace("div", "/")
+        return infix[1:-1]
+
+    def get_solution(self) -> list:
+        query = "[" + ",".join(char for char in self.current_question) + "]"
+        postfix = list(self.prolog.query(f"solve24({query}, X)"))
+        infix = self.postfix_to_infix(postfix[0]['X'])
+        return infix
